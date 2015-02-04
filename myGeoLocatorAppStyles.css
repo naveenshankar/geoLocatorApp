@@ -1,0 +1,95 @@
+
+.mainContainer{
+	border:1px solid;
+	border-radius:10px;
+	margin:auto;
+	position:relative;
+	width:960px;
+	height:auto;
+	background-color: gray;
+	*width:100%;
+}
+
+.mainContainer .mainForm{
+	display: inline-block;
+	width: 100%;
+	text-align: center;
+	padding-top: 10px;
+}
+
+.mainContainer #map-canvas{
+	width: 900px;
+    height: 400px;
+    margin:20px auto 20px auto;
+}
+
+.mainContainer .mainForm .searchInput{
+	width:50%;
+	font-size: 17px;
+	position: relative;
+	border-radius: 10px;
+	border-style: solid;
+	border-color: #9494D6;
+	background-color: #FFF;
+	cursor:text;
+}
+
+.mainContainer .mainForm .searchButton,.mainContainer .mainForm .locateButton,.mainContainer .mainForm .resetButton{
+	font-size: 17px;
+	position: relative;
+	border-radius: 10px;
+	border-style: solid;
+	border-color: #9494D6;
+	background-color: #FFF;
+	cursor:pointer;
+}
+
+.mainContainer .mainForm .locateButton{
+	margin:auto;
+	/*display:block;*/
+}
+
+/* spinner with CSS*/
+
+@-webkit-keyframes sweep {
+ to {
+	  -webkit-transform: rotate(360deg);
+	  -ms-transform: rotate(360deg); 
+	  transform: rotate(360deg);
+  } 
+}
+
+ @keyframes fadeIn
+{
+	from {
+			display:block;
+			opacity:0;
+		}
+	to {
+			display:block;
+			opacity:1;
+		}
+}
+
+ @-webkit-keyframes fadeIn 
+{
+	from {
+			display:block;
+			opacity:0;
+		}
+	to {
+			display:block;
+			opacity:1;
+		}
+}
+
+
+@media only screen and (max-width: 960px) {
+    .mainContainer{
+    	width:100%;
+    	height:100%;
+    }
+    .mainContainer .mainForm input{
+		font-size: 10px
+	}
+}
