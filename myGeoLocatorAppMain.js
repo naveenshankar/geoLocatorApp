@@ -2,16 +2,16 @@ var myGeoLocatorAppMain = function()
 {	
 	var models = new myGeoLocatorAppModels();
 	var views = new myGeoLocatorAppViews();
+	var mapData = this.mapData = new models.mapData();
+	this.utils = new myGeoLocatorAppUtils();
 
-    var table = this.tableData = new models.formData();
-	var chart = this.chartData = new models.mapData();
-
-	this.formView = new views.formView({el:'.mainForm',model:this.formData});
-	this.formView.listenTo(this.formData, 'change:dataTables', this.formView.render);
+	this.formView = new views.formView({el:'.mainForm',model:this.mapData});
+	this.formView.listenTo(this.mapData, 'change:errorMsgFlag', this.formView.showHideErrorMsg);
+	this.formView.listenTo(this.mapData, 'change:currentErrorMsg', this.formView.changeErrorMessage);
 
 	this.mapView = new views.mapView({el:'.mapLocation',model:this.mapData});
-	this.mapView.listenTo(this.mapData, 'change:dataRecords', this.mapView.render);
-	
+	this.mapView.listenTo(this.mapData, 'change:myCompanyLocationData', this.mapView.renderMyCompanyLocation);
+	this.mapView.listenTo(this.mapData, 'change:myLocationData', this.mapView.renderOrEraseMyLocation);
 }
 
 $( document ).ready(function() {
