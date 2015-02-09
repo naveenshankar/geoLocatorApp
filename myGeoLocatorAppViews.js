@@ -1,5 +1,6 @@
 var myGeoLocatorAppViews = function()
 {
+    var utils = new myGeoLocatorAppUtils();
 	this.formView = Backbone.View.extend(
             {
                 initialize : function()
@@ -8,36 +9,69 @@ var myGeoLocatorAppViews = function()
                 },
                 events: {
                     "click .searchButton": "searchAddress",
-                    "keyup .searchInput" : "showPrompt",
-                    "click .locateButton":   "findMe"
+                    "click .locateButton":   "findMe",
+                    "click .resetButton":   "removeLocation"
                 },
-                showPrompt: function(e){
-                    if(e.keyCode == 13){
-                        $('.searchButton').trigger('click');
-                     }
-                },
-                searchAddress: function(){
-                    var utils = new myGeoLocatorAppUtils();
+                searchAddress: function(e){
+                    e.stopImmediatePropagation();
+                    var promiseOfResponse;
                     var websiteName = $('.searchInput').val();
-                    var promiseOfResponse = utils.getWebsiteCoordinates(websiteName);
-                    function renderAddress(position) {
-                        utils.renderMap('map-canvas',position);
-                    }
-                    promiseOfResponse.done(function(data){renderAddress(data)});
-                },
-                findMe: function(){
-                    var utils = new myGeoLocatorAppUtils();
-                    var mapCanvas = document.getElementById('map-canvas');
-                    function success(position) {
-                        utils.renderMap('map-canvas',position.coords);
-                    } 
-                    function error() {
-                        
-                    } 
-                    navigator.geolocation.getCurrentPosition(success, error);
-                },
-                render: function(){
 
+                    if(websiteName == ''){
+                        thisView.model.set('currentErrorMsg','syntax');
+                        thisView.model.set('errorMsgFlag',true);
+                        thisView.model.set('myCompanyLocationData',null);
+                    }
+                    else{
+                        promiseOfResponse = utils.getWebsiteCoordinates(websiteName);
+                        promiseOfResponse.done(function(data){
+                            thisView.model.set('errorMsgFlag',false);
+                            thisView.model.set('myLocationData',null);
+                            thisView.model.set('myCompanyLocationData',data);
+                        }).fail(function(data){ 
+                            thisView.model.set('currentErrorMsg','unavailable');
+                            thisView.model.set('errorMsgFlag',true);
+                        });
+                    }
+                },
+                findMe: function(e){
+                    e.stopImmediatePropagation();
+                    var websiteName = $('.searchInput').val();
+                    var promiseOfResponse ;
+
+                    if(websiteName == ''){
+                        thisView.model.set('myLocationData',{});
+                        thisView.model.set('myCompanyLocationData',null);
+                        thisView.model.set('errorMsgFlag',false);
+                    }
+                    else{
+                        promiseOfResponse = utils.getWebsiteCoordinates(websiteName);
+                        promiseOfResponse.done(function(data){
+                            thisView.model.set('errorMsgFlag',false);
+                            thisView.model.set('myLocationData',{});
+                            thisView.model.set('myCompanyLocationData',data);
+                        }).fail(function(data){
+                            thisView.model.set('errorMsgFlag',true);
+                            thisView.model.set('currentErrorMsg','unavailable');
+                            thisView.model.set('myLocationData',{});
+                            thisView.model.set('myCompanyLocationData',null);
+                        });
+                    }
+                },
+                showHideErrorMsg: function(){
+                    if(thisView.model.get('errorMsgFlag') == true){
+                        $('.errormsgs').fadeIn("slow");
+                    }
+                    else {
+                        $('.errormsgs').fadeOut("slow");
+                    }  
+                },
+                changeErrorMessage: function(){
+                    var errorType = thisView.model.get('currentErrorMsg');
+                    $('.errorText').html(thisView.model.get('myErrorMsgs')[errorType]); 
+                },
+                removeLocation: function(){
+                    thisView.model.set('myLocationData',null);
                 }
             });
 
@@ -45,12 +79,20 @@ var myGeoLocatorAppViews = function()
             {
                 initialize : function()
                 { 
-                  console.log("initialize");
-                  mapView = this;
                   $(this.el).hide();
                 },
-                render : function(){
-                  //console
+                renderOrEraseMyLocation : function(){
+                    $(this.el).slideDown("slow");
+                    utils.renderMap('map-canvas',this.model.get('myCompanyLocationData'),this.model.get('myLocationData'));
+                    if(!this.model.get('myCompanyLocationData') && !this.model.get('myLocationData')){
+                        $(this.el).slideUp("slow");
+                    }
+                },
+                renderMyCompanyLocation : function(){
+                    $(this.el).slideDown("slow");
+                    if(this.model.get('myCompanyLocationData')){
+                        utils.renderMap('map-canvas',this.model.get('myCompanyLocationData'),this.model.get('myLocationData'));
+                    }
                 }
             });
 
