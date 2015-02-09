@@ -5,16 +5,25 @@
 <title>
 Geolocator
 </title>
+<link rel="stylesheet" href="bootstrap.min.css">
 <link rel="stylesheet" href="myGeoLocatorAppStyles.css">
-<!--link rel="stylesheet" href="Qunit.css"-->
+<link rel="stylesheet" href="Qunit.css">
 </head>
 <body>
 	<div class="mainContainer" >
 		<div class="mainForm" >
-			<input class="searchInput" type="text" name="websiteName" />
-			<input class="searchButton" type="button" name="locateWebsite" value="Locate" />
-			<input class="locateButton" type="button" name="locateMe" value="My Location" />
-			<input class="resetButton" type="button" name="resetMe" value="Reset My Location" />
+			<input class="searchInput form-control" placeholder="Enter a valid website" type="text" name="websiteName" />
+			<div class="alert alert-danger errormsgs" role="alert">
+				  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				  <span class="sr-only">Error:</span>
+				  <span class="errorText">
+				  </span>
+			</div>
+			<div class="buttons">
+				<input class="searchButton btn btn-default" type="button" name="locateWebsite" value="Locate" />
+				<input class="locateButton btn btn-default" type="button" name="locateMe" value="My Location" />
+				<input class="resetButton btn btn-default" type="button" name="resetMe" value="Reset My Location" />
+			</div>
 		</div>
 		<div class="mapLocation">
 			<div id="map-canvas"></div>
@@ -25,12 +34,12 @@ Geolocator
 	<script type="text/javascript" src="underscore.js"></script>
 	<script type="text/javascript" src="backbone.js"></script>
 	<script type="text/javascript" src="modernizr.js"></script>
-	<!--script type="text/javascript" src="Qunit.js"></script-->
+	<script type="text/javascript" src="Qunit.js"></script>
 	 <script src="https://maps.googleapis.com/maps/api/js"></script>
 	<script type="text/javascript" src="myGeoLocatorAppUtils.js"></script>
 	<script type="text/javascript" src="myGeoLocatorAppModels.js"></script>
 	<script type="text/javascript" src="myGeoLocatorAppViews.js"></script>
 	<script type="text/javascript" src="myGeoLocatorAppMain.js"></script>
-	<!--script type="text/javascript" src="myGeoLocatorAppUnitTest.js"></script-->
+	<script type="text/javascript" src="myGeoLocatorAppUnitTest.js"></script>
 </body>
 </html>
