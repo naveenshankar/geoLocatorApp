@@ -6,6 +6,7 @@ var myGeoLocatorAppViews = function()
                 initialize : function()
                 {  
                     thisView = this;
+                    utils.initializeAutoComplete('.searchInput');
                 },
                 events: {
                     "click .searchButton": "searchAddress",
@@ -23,15 +24,25 @@ var myGeoLocatorAppViews = function()
                         thisView.model.set('myCompanyLocationData',null);
                     }
                     else{
-                        promiseOfResponse = utils.getWebsiteCoordinates(websiteName);
-                        promiseOfResponse.done(function(data){
+                        if(localStorage[websiteName]){
+                            var data = JSON.parse(localStorage[websiteName]);
                             thisView.model.set('errorMsgFlag',false);
                             thisView.model.set('myLocationData',null);
                             thisView.model.set('myCompanyLocationData',data);
-                        }).fail(function(data){ 
-                            thisView.model.set('currentErrorMsg','unavailable');
-                            thisView.model.set('errorMsgFlag',true);
-                        });
+                        }
+                        else{
+                            promiseOfResponse = utils.getWebsiteCoordinates(websiteName);
+                            promiseOfResponse.done(function(data){
+                                localStorage.setItem(websiteName, JSON.stringify(data));
+                                utils.initializeAutoComplete('.searchInput');
+                                thisView.model.set('errorMsgFlag',false);
+                                thisView.model.set('myLocationData',null);
+                                thisView.model.set('myCompanyLocationData',data);
+                            }).fail(function(data){ 
+                                thisView.model.set('currentErrorMsg','unavailable');
+                                thisView.model.set('errorMsgFlag',true);
+                            });
+                        }
                     }
                 },
                 findMe: function(e){
@@ -45,17 +56,25 @@ var myGeoLocatorAppViews = function()
                         thisView.model.set('errorMsgFlag',false);
                     }
                     else{
-                        promiseOfResponse = utils.getWebsiteCoordinates(websiteName);
-                        promiseOfResponse.done(function(data){
+                        if(localStorage[websiteName]){
+                            var data = JSON.parse(localStorage[websiteName]);
                             thisView.model.set('errorMsgFlag',false);
                             thisView.model.set('myLocationData',{});
                             thisView.model.set('myCompanyLocationData',data);
-                        }).fail(function(data){
-                            thisView.model.set('errorMsgFlag',true);
-                            thisView.model.set('currentErrorMsg','unavailable');
-                            thisView.model.set('myLocationData',{});
-                            thisView.model.set('myCompanyLocationData',null);
-                        });
+                        }
+                        else{
+                            promiseOfResponse = utils.getWebsiteCoordinates(websiteName);
+                            promiseOfResponse.done(function(data){
+                                thisView.model.set('errorMsgFlag',false);
+                                thisView.model.set('myLocationData',{});
+                                thisView.model.set('myCompanyLocationData',data);
+                            }).fail(function(data){
+                                thisView.model.set('errorMsgFlag',true);
+                                thisView.model.set('currentErrorMsg','unavailable');
+                                thisView.model.set('myLocationData',{});
+                                thisView.model.set('myCompanyLocationData',null);
+                            });
+                        }
                     }
                 },
                 showHideErrorMsg: function(){
@@ -65,6 +84,9 @@ var myGeoLocatorAppViews = function()
                     else {
                         $('.errormsgs').fadeOut("slow");
                     }  
+                },
+                updateLocalStorage: function(){
+                    
                 },
                 changeErrorMessage: function(){
                     var errorType = thisView.model.get('currentErrorMsg');
