@@ -56,6 +56,11 @@
 	margin:auto;
 }
 
+.typeahead{
+	top: 44px !important;
+	left:25% !important;
+}
+
 /* spinner with CSS*/
 
 @-webkit-keyframes sweep {
