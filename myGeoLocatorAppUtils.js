@@ -12,8 +12,16 @@ myGeoLocatorAppUtils.prototype.getWebsiteCoordinates = function(address){
   	return response;
 }
 
+myGeoLocatorAppUtils.prototype.initializeAutoComplete = function(domClass){
+        var options = {};
+        options['data-provide'] = "typeahead" ;
+        options.source = Object.keys(localStorage);
+        $(domClass).typeahead(options);
+        console.log(localStorage);
+}
+
 myGeoLocatorAppUtils.prototype.renderMap = function(canvasId,companyLocation,myLocation){
-		var mapCanvas = document.getElementById(canvasId);
+    var mapCanvas = document.getElementById(canvasId);
     var that = this;
 
     function success(position) {
