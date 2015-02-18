@@ -14,5 +14,10 @@ $( document ).ready(function() {
 	    		assert.equal($('.errorText').html(), "Website not Found!", "Dynamic Error messages work!" );
 	    		newApp.formView.model.set('currentErrorMsg',"");
 		});
+
+		QUnit.test( "testHistory", function(assert) {
+	    		//var lHistoryLength = 
+	    		//$('dropdown-menu').
+		});
 	
 });
